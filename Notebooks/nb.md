@@ -1,5 +1,5 @@
 # Notebooks
-This contains various google colab notebooks that are used for the purposes of $
+This contains various google colab notebooks that are used for the purposes of disipation profile data visualization of stellar mass black holes. 
 
 ## TimeAvgDiss.ipynb
 This notebook will contain code relevant for data visualization of stellar mass black holes, specifically plotting time averaged dissipation profiles. 
