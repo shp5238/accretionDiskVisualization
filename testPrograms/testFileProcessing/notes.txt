@@ -1,0 +1,15 @@
+The file test.py displays the relative path. 
+However, a commonality is that regardless of the path, 
+the last few letters describe the file type and before the "." character, 
+it describes the name of the file. 
+
+Since we know that the athdf files that we are interested in are formatted as 
+"disk.out1.00001.athdf"
+
+If the user is interested in knowing which file, it might be enough to just 
+print the number of the slurm file. 
+
+The disk id. 
+
+[-7:-12] # must be counted from the back due to the relative path, and not 
+the absolute path being displayed
