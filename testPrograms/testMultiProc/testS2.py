@@ -40,6 +40,7 @@ def main():
 
     # Run in parallel using subprocess workers
     with ProcessPoolExecutor() as executor:
+        
         results = executor.map(worker_fn, file_list)
         for result in results:
             print(result)
