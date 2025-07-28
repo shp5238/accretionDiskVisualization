@@ -3,34 +3,33 @@
 
 import athena_read
 import timer
-import oldAR
+import numpy as np
+import plot
 
 def main():
-    # code here
-    
-    # combine measure time functionality
-
+    # Measure time functionality
     t = timer.Timer()
     f = "disk.out1.00018.athdf"
 
     # start the timer
     t.start_time()
 
-    data = oldAR.athdf(f)
-    # data = athena_read.athdf(f) # Read the file
-    # key_validation(data)
+    data = athena_read.athdf(f) # Read the file
+    key_validation(data)
+
+    theta = data['x2v']
+    xArr = (theta/np.pi)
+    yArr = np.linspace(0, 10, 256)  
 
     # end the timer 
     t.end_time()
     print("The program successfully executed!")
-    
+
+    # plot the data
+    plot.plot_data(xArr, yArr)
+        
     # output total time
     t.getTotalTime()
-
-    """
-    Results: based on this test, there is no significant improvement between 
-    the shorter athena_read and the longer version. 
-    """
 
 
 def key_validation(data):
