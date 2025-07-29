@@ -1,4 +1,11 @@
-# worker.py
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" worker.py
+
+"""
+
+# IMPORTS
 import sys
 import os
 
@@ -12,6 +19,31 @@ String: file_path, int radius
 Returns: None
 """
 def run_program(file_path, radius, output_f=""):
+    # Debugging file access issues
+    print(f"[INFO] Attempting to open: {file_path}", file=sys.stderr)
+    print(f"[INFO] Absolute path: {os.path.abspath(file_path)}", file=sys.stderr)
+
+    if not os.path.exists(file_path):
+       print(f"[ERROR] File does NOT exist at: {file_path}", file=sys.stderr)
+       print(f"[DEBUG] Current Working Dir: {os.getcwd()}", file=sys.stderr)
+       print(f"[DEBUG] Volume Mounted? /Volumes/Athena → {os.path.ismount('/Volumes/Athena')}", file=sys.stderr)
+       parent_dir = os.path.dirname(file_path)
+       print(f"[DEBUG] Files in {parent_dir}:", os.listdir(parent_dir), file=sys.stderr)
+       sys.exit(1)    
+
+
+
+
+
+    """
+    if not os.path.isfile(file_path):
+        print(f"Error: File not found in worker: {file_path}", file = sys.stderr)
+        print(f"Error: CWD in worker {os.getcwd()}", file = sys.stderr)
+        print(f"Volume mounted:  {os.path.ismount('/Volumes/Athena')}", file = sys.stderr)
+        print(f"Listing dir: {os.listdir('/Volumes/Athena/summer25files')}", file = sys.stderr)
+        sys.exit(1)
+    """
+    
     f = os.path.basename(file_path) # get filename
     data = athena_read.athdf(f) # reads file
     key_validation(data)
@@ -88,12 +120,27 @@ def run_program(file_path, radius, output_f=""):
 
 
 def key_validation(data):
+    if not "Fr1" in data.keys():
+        raise ValueError("Fr1 is not a key, choose another athdf file") 
+    if not "Fr2" in data.keys():
+        raise ValueError("Fr2 is not a key, choose another athdf file")
+    if not "Fr3" in data.keys():
+        raise ValueError("Fr3 is not a key, choose another athdf file")
+    if not "x1v" in data.keys():
+        raise ValueError("x1v (r) is not a key, choose another athdf file")
+    if not "x2v" in data.keys():
+        raise ValueError("x2v (theta) is not a key, choose another athdf file")    
+    if not "x3v" in data.keys():
+        raise ValueError("x3v (phi) is not a key, choose another athdf file")   
+
+    """ For programmer use only, when running worker.py individually, uncomment
     assert ("Fr1" in data.keys()), "Fr1 is not a key, choose another athdf file"
     assert ("Fr2" in data.keys()), "Fr2 is not a key, choose another athdf file"
     assert ("Fr3" in data.keys()), "Fr3 is not a key, choose another athdf file"
     assert ("x1v" in data.keys()), "x1v (r) is not a key, choose another athdf file"
     assert ("x2v" in data.keys()), "x2v (theta) is not a key, choose another athdf file"
     assert ("x3v" in data.keys()), "x3v (phi) is not a key, choose another athdf file"
+    """
 
 def main():
     args = sys.argv[1:]

@@ -29,7 +29,6 @@ from functools import partial
 
 import worker
 import plot
-import timer
 
 import sys
 import argparse
@@ -81,7 +80,7 @@ def run_worker_script(file_path, radius):
     
     # Check if worker.py succeeded
     if result.returncode != 0: 
-        print(f"Error: worker.py failed on {file_path}:\n{result.stderr}") 
+        printf("Error: worker.py failed on {file_path:\n{result.stderr}}") 
         return None
 
     # Load the .npy result
@@ -99,36 +98,12 @@ def run_worker_script(file_path, radius):
 
 # ==== ==== THE MAIN FUNCTION ==== ==== #
 def main():
-    # Positional Arguments
     parser = argparse.ArgumentParser(description="Usage: python(3) script.py <radius>")
     parser.add_argument("radius", type=radial_int, help="Integer radius index between -512 and 511.")
-    # Optional Arguments
-    
-    parser.add_argument("-t", "--time", 
-    action="store_true",
-    dest="time_measured",
-    help="Option to measure and display time of program.")
-    
-    parser.add_argument("-d", "--dir", default=".", help='Path to the drectory contianing the .athdf files (default: current directory)')    
-
     args = parser.parse_args()
     
-    # Can manually specify files here
-    # file_list = ["disk.out1.00018.athdf", "disk.out1.00019.athdf"]
+    file_list = ["disk.out1.00018.athdf", "disk.out1.00019.athdf"]
     
-    # ---- ---- Find the files to process ---- ---- #
-    data_dir = os.path.abspath(args.dir) # Normalizing the path
-    file_list = [os.path.join(args.dir, f) for f in os.listdir(data_dir)
-    if f.endswith(".athdf")]
-
-    if not file_list: # file list is empty
-        print(f"There are no .athdf files detected in directory: {args.dir}")
-        return # Should stop the program, since nohing to compute
-
-    if args.time_measured:
-        t = timer.Timer()
-        t.start_time()
-
     worker_fn = partial(run_worker_script, radius=args.radius)
 
     # If doesn't exist, save theta and phi arrays for later
@@ -190,14 +165,10 @@ def main():
     # Define x array
     xArr = (theta / np.pi) 
 
-    if args.time_measured:
-        t.end_time()
-
     plot.plot_data(xArr, yArr, rad=args.radius)	
 
     print("Program executed successfully!")
-    if args.time_measured:
-        t.getTotalTime()
+
 
 	
 if __name__ == "__main__":
