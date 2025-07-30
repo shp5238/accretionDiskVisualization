@@ -16,25 +16,27 @@ code/
 |__ *.athdf             # All .athdf files must be located here
 |__ output/             # Output directory for graphs and results
 
-Usage: python script.py <one_arg> <two_arg>
+Usage: python(3) script.py <one_arg> <two_arg>
 """
 
 # IMPORTS
-import os
-import argparse
+
+# System, OS, and CLI utilities
+import os # OS interaction
+import sys # sys functions
+import argparse # CLI parsing
+import subprocess # run external commands
 
 # Multiprocessing libraries: 
 from concurrent.futures import ProcessPoolExecutor
 from functools import partial
 
+# Custom Helper Modules
 import worker
 import plot
 import timer
 
-import sys
-import argparse
-import subprocess
-
+# Other Python modules
 import numpy as np
 
 # ==== ==== Validation Helper Functions ==== ==== #
@@ -71,6 +73,9 @@ def radial_int(value):
 
 # ==== ==== Core Worker ===== ===== #
 def run_worker_script(file_path, radius):
+    # Use absolute paths so worker processes can find external hard drives
+    file_path = os.path.abspath(file_path) # path of athdf file
+    
     # Create output filename based on input filename
     output_file = file_path + ".npy"
     

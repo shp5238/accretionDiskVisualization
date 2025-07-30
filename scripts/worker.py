@@ -44,8 +44,11 @@ def run_program(file_path, radius, output_f=""):
         sys.exit(1)
     """
     
-    f = os.path.basename(file_path) # get filename
-    data = athena_read.athdf(f) # reads file
+    # Don't do the below line because it drops the full path
+    # f = os.path.basename(file_path) # get filename
+    # data = athena_read.athdf(f) # reads file
+    
+    data = athena_read.athdf(file_path)
     key_validation(data)
 
     # Get relevant quantities

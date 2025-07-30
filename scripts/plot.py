@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 """plot.py 
 This file contains the code for data compression from 
 a 2d array to a 2d array such as averaging data wrt 
@@ -5,14 +8,19 @@ to an axis as well as graphing data for relevant
 dissipation plots. 
 """
 
+# IMPORTS
+
+# Python Modules
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors 
 import math
 
+# Other
 import os
 import athena_read
 
+# ---- ---- Data Scaling Methods  ---- ---- #
 """
 Computes the integral of a quantity manually using loops.
 Used for <divergence> wrt phi. rarely used.
@@ -37,6 +45,7 @@ Computes the integral of a quantity manually using loops.
 Used for <divergence> Wrt phi.
 Parameters: input_arr.shape = [phi, theta]
   int[int []], 2d array
+Returns: yArray: int[] of format [theta]
 """
 def scale_wrt_theta(input_arr, phi): #of format [phi, theta]
     # Integration of phi for each theta
@@ -68,16 +77,35 @@ def plot_data(xArr, yArr, xlabel="Theta / pi", ylabel="Dissipation Profile", rad
     return None
 
 
+
+# ---- ---- Data Extraction Methods ---- ---- #
+
+"""
+Extracts 'theta' data from an .athdf output file and saves it as a NumPy binary file
+for convenient use in graph plotting and further analysis. 
+
+Argument(s): file_path (str): full path to the .athdf file
+Returns: None
+"""
 def save_theta(file_path):
     f = os.path.basename(file_path) # get filename
     data = athena_read.athdf(f) # reads file
     theta = data['x2v']
     path = os.path.join(os.getcwd(), "theta.npy")
     np.save(path, theta)
+    return None
 
+"""
+Extracts 'phi' data from an .athdf output file and saves it as a NumPy binary file     
+for convenient use in graph plotting and further analysis.
+
+Argument(s): file_path (str): full path to the .athdf file
+Returns: None
+"""
 def save_phi(file_path):         
     f = os.path.basename(file_path) # get filename
     data = athena_read.athdf(f) # reads file
     phi = data['x3v']   
     path = os.path.join(os.getcwd(), "phi.npy")
-    np.save(path, phi)    
+    np.save(path, phi)
+    return None

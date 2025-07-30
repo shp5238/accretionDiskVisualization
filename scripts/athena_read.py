@@ -9,6 +9,9 @@ import sys
 import warnings
 from io import open  # Consistent binary I/O from Python 2 and 3
 
+# EDIT 07-29-2025 
+import os
+
 # Other Python modules
 import numpy as np
 
@@ -43,6 +46,8 @@ def athdf(filename, raw=False, data=None, quantities=None, dtype=None, level=Non
     # Handle request for raw data
     if raw:
         # Open file
+        # EDIT 07-29-2025 ensure abs path:
+        filename = os.path.abspath(filename)
         with h5py.File(filename, 'r') as f:
             # Store file-level attributes
             data = {}

@@ -1,4 +1,23 @@
-# timer.py 
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""timer.py 
+Custom timer module to measure and display the elapsed time of program execution.
+
+Features: 
+- Encapsulates timing logic for simplicity and reusability.
+- Convenient interface with start, end, and total time retrieval methods. 
+
+Typical Usage:
+    import timer
+
+    t = timer.Timer()
+    t.start_time()
+    # ... program code here  ...
+    t.end_time()
+    t.getTotalTime()    # prints "Total time is {total} units.")
+"""
+
 import time
 
 class Timer: 
@@ -51,4 +70,3 @@ class Timer:
             print("Total time is 0 seconds.")
     
         return None
-
