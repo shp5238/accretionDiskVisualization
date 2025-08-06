@@ -72,10 +72,7 @@ This function recursively walks upward from the file location to find the projec
 marker_name can be a directory like ".git" or a file (".yml")
 """
 def find_proj_root(marker_name):
-    try: # Start from the script's direction
-        curr = os.path.abspath(os.path.dirname(__file__))
-    except NameError: 
-        curr = os.getcwd()
+    curr = os.path.abspath(os.path.dirname(os.getcwd()))    
 
     while True: 
         # looks for file or directory
@@ -99,7 +96,6 @@ def run_worker_script(file_path, radius):
     output_file = file_path + ".npy"
 
     project_root = find_proj_root('.git')
-    # Debugging: print(f"Root: {project_root}")
     worker_path = os.path.join(project_root, 'scripts', 'worker.py')
 
     result = subprocess.run(
@@ -119,7 +115,7 @@ def run_worker_script(file_path, radius):
         print(f"Error: failed to load {output_file}: {e}")
         return None   
 
-    # Delete the .npy file when no longer needed 
+    # Later: delete the .npy file when no longer needed 
     os.remove(output_file)
 
     return arr 
@@ -127,6 +123,7 @@ def run_worker_script(file_path, radius):
 
 # ==== ==== THE MAIN FUNCTION ==== ==== #
 def main():
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(os.getcwd())) # TO DELETE
     # Positional Arguments
     parser = argparse.ArgumentParser(description="Usage: python(3) script.py <radius>")
     parser.add_argument("radius", type=radial_int, help="Integer radius index between -512 and 511.")
@@ -140,30 +137,21 @@ def main():
     parser.add_argument("-d", "--dir", default=".", help='Path to the drectory contianing the .athdf files (default: current directory)')    
 
     args = parser.parse_args()
-    
-    # Can manually specify files here
-    # file_list = ["disk.out1.00018.athdf", "disk.out1.00019.athdf"]
-    
-    """
-    # TODO: add --start, -s and --end, -e and --inc, -i flags
-    os.path.exists(filename)
-
-    specify range for customization
-    - assumes filenames follow strict pattern
-    - selective filtering of athdf files
-    """
-
+        
     # ---- ---- Find the files to process ---- ---- #
-    data_dir = os.path.abspath(args.dir) # Normalizing the path
-    file_list = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if f.endswith(".athdf")]
+    data_dir = os.path.abspath(args.dir) # Normalizing the path]
+    file_list = [os.path.join(args.dir, f) for f in os.listdir(data_dir)
+    if f.endswith(".athdf")]
 
     if not file_list: # file list is empty
         print(f"There are no .athdf files detected in directory: {args.dir}")
         return # Should stop the program, since nohing to compute
 
     # Debugging which files used.
-    print(f"Files used: {file_list}") 
-    first_f = file_list[0] # fastest
+    print(f"Files used: {file_list}")
+    # first_f = os.path.join(data_dir, file_list[0])
+    first_f = file_list[0]
+    # first_f = os.path.abspath(file_list[0])
     print(first_f)
 
     if args.time_measured:
@@ -172,14 +160,14 @@ def main():
 
     worker_fn = partial(run_worker_script, radius=args.radius)
 
-    # If doesn't exist, save theta and phi arrays for later
+    # They don't already exist, save theta and phi arrays for later
     theta_path = os.path.abspath("theta.npy")
     phi_path = os.path.abspath("phi.npy")
-    
+
     if (not os.path.exists(theta_path)):
-        plot.save_theta(first_f)
+        plot.save_theta(file_list[0])
     if (not os.path.exists(phi_path)):
-        plot.save_phi(first_f)
+        plot.save_phi(file_list[0])
 
     # Create output filename based on input filename
     output_file = file_list[0][0:-7] + ".npy"

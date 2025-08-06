@@ -9,7 +9,10 @@
 import sys
 import os
 
+# Helper Module
 import athena_read
+
+# Other Python Modules
 import numpy as np
 
 
@@ -19,6 +22,7 @@ String: file_path, int radius
 Returns: None
 """
 def run_program(file_path, radius, output_f=""):
+    # TODO: rewrite debugging code as error validation to catch errors. error handling
     # Debugging file access issues
     print(f"[INFO] Attempting to open: {file_path}", file=sys.stderr)
     print(f"[INFO] Absolute path: {os.path.abspath(file_path)}", file=sys.stderr)
@@ -32,9 +36,6 @@ def run_program(file_path, radius, output_f=""):
        sys.exit(1)    
 
 
-
-
-
     """
     if not os.path.isfile(file_path):
         print(f"Error: File not found in worker: {file_path}", file = sys.stderr)
@@ -44,10 +45,7 @@ def run_program(file_path, radius, output_f=""):
         sys.exit(1)
     """
     
-    # Don't do the below line because it drops the full path
-    # f = os.path.basename(file_path) # get filename
-    # data = athena_read.athdf(f) # reads file
-    
+    # Read the file and validate data
     data = athena_read.athdf(file_path)
     key_validation(data)
 

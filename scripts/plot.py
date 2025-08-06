@@ -26,6 +26,14 @@ Computes the integral of a quantity manually using loops.
 Used for <divergence> wrt phi. rarely used.
 """
 def scale_wrt_phi(input_arr, theta): #of format [phi, theta]
+    # Input array validation
+    if input_arr.shape != (256, 256):
+        raise ValueError(f"Input array is not of the correct shape: {input_arr.shape}")
+
+    # theta array validation
+    if theta.shape != (256,):
+        raise ValueError(f"Theta array is not of the correct shape: {theta.shape}")    
+
     # Integration of theta for each phi
     yArray = np.zeros(len(input_arr))
 
@@ -48,6 +56,14 @@ Parameters: input_arr.shape = [phi, theta]
 Returns: yArray: int[] of format [theta]
 """
 def scale_wrt_theta(input_arr, phi): #of format [phi, theta]
+    # Input array validation
+    if input_arr.shape != (256, 256):
+        raise ValueError(f"Input array is not of the correct shape: {input_arr.shape}")
+    
+    # phi array validation
+    if phi.shape != (256,): 
+        raise ValueError(f"Phi array is not of the correct shape: {phi.shape}")
+
     # Integration of phi for each theta
     yArray = np.zeros(len(input_arr[0]))
 
@@ -88,8 +104,7 @@ Argument(s): file_path (str): full path to the .athdf file
 Returns: None
 """
 def save_theta(file_path):
-    f = os.path.basename(file_path) # get filename
-    data = athena_read.athdf(f) # reads file
+    data = athena_read.athdf(file_path) # reads file
     theta = data['x2v']
     path = os.path.join(os.getcwd(), "theta.npy")
     np.save(path, theta)
@@ -102,9 +117,8 @@ for convenient use in graph plotting and further analysis.
 Argument(s): file_path (str): full path to the .athdf file
 Returns: None
 """
-def save_phi(file_path):         
-    f = os.path.basename(file_path) # get filename
-    data = athena_read.athdf(f) # reads file
+def save_phi(file_path):
+    data = athena_read.athdf(file_path) # reads file
     phi = data['x3v']   
     path = os.path.join(os.getcwd(), "phi.npy")
     np.save(path, phi)
