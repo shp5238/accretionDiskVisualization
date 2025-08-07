@@ -84,11 +84,11 @@ Argument(s): xArr: 1d [float], yArr: 1d[float]
 Optional:  xlabel="Theta / pi", ylabel="Dissipation Profile", rad=-1 (sentinel by default)
 Returns: None
 """
-def plot_data(xArr, yArr, xlabel="Theta / pi", ylabel="Dissipation Profile", rad=-1):
+def plot_data(xArr, yArr, xlabel="Theta / pi", ylabel="Dissipation Profile", title="Dissipation Profile wrt theta", rad=-1):
     plt.plot(xArr, yArr)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(f"Dissipation profile wrt theta generated at radius: {rad}")
+    plt.title(f"{title} generated at radius: {rad}")
     plt.show()
     return None
 
